@@ -58,7 +58,7 @@ jobs:
       - name: Docker Build and push
         uses: docker/build-push-action@v4
         with:
-          file: .stella_vslam//Dockerfile.desktop
+          file: ./stella_vslam//Dockerfile.desktop
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
