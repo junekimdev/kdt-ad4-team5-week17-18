@@ -1,0 +1,65 @@
+name: Stella VSLAM Docker Build
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  REGISTRY: ghcr.io
+  REPO_NAME: ${{ github.repository }}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  dockerize:
+    runs-on: self-hosted
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REPO_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern=stell-{{version}}
+            type=semver,pattern=stell-{{major}}.{{minor}}
+
+      - name: Login to Github Container registry
+        if: github.ref_type == 'tag'
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Git Clone
+        uses: actions/checkout@v3
+        with:
+          github-server-url: https://github.com
+          repository: stella-cv/stella_vslam
+          submodules: true
+          path: stella_vslam
+
+      - name: Docker Build and push
+        uses: docker/build-push-action@v4
+        with:
+          file: .stella_vslam//Dockerfile.desktop
+          push: ${{ github.ref_type == 'tag' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64

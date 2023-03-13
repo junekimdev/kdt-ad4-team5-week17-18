@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # Install Open3D system dependencies and pip
 RUN apt-get update \
-  && apt-get install --no-install-recommends -qy \
+  && apt-get install --no-install-recommends -qq -y \
     libgl1 \
     libgomp1 \
     python3-pip \
