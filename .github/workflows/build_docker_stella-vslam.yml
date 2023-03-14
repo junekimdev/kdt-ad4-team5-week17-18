@@ -55,11 +55,16 @@ jobs:
           submodules: true
           path: stella_vslam
 
+      - name: Set number of threads
+        run: echo "NUM_THREADS=$(expr $(nproc) - 1)" >> $GITHUB_ENV
+
       - name: Docker Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./stella_vslam//Dockerfile.desktop
+          file: ${{ github.workspace }}/stella_vslam//Dockerfile.desktop
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            NUM_THREADS=${{ env.NUM_THREADS }}
