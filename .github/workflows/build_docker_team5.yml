@@ -60,6 +60,7 @@ jobs:
       - name: Docker Build and push
         uses: docker/build-push-action@v4
         with:
+          context: .
           file: ./Dockerfile.team5
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
