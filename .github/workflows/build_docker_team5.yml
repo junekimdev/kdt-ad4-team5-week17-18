@@ -46,8 +46,8 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern=open3d-{{version}}
-            type=semver,pattern=open3d-{{major}}.{{minor}}
+            type=semver,pattern=team5-{{version}}
+            type=semver,pattern=team5-{{major}}.{{minor}}
 
       - name: Login to Github Container registry
         if: github.ref_type == 'tag'

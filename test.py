@@ -1,3 +1,3 @@
 #!/usr/bin/python3
 
-print("Here comes tests")
+print("Here comes the test")
