@@ -24,8 +24,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip && \
 WORKDIR /Open3D
 RUN git clone https://github.com/isl-org/Open3D.git .
 
-WORKDIR /dataset
-COPY ./dataset .
+VOLUME [ "/dataset" ]
 
 ARG DEVICE=CPU:0
 
