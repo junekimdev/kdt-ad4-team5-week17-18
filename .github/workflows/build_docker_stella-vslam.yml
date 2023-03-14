@@ -27,6 +27,7 @@ jobs:
 
       - name: Run code test suite
         run: |
+          chmod +x ./test.py
           echo "===== Testing started ====="
           ./test.py
           echo "===== Testing finished ====="
