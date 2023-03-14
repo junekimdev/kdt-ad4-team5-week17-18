@@ -22,6 +22,15 @@ jobs:
       packages: write
 
     steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Run code test suite
+        run: |
+          echo "===== Testing started ====="
+          ./test.py
+          echo "===== Testing finished ====="
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
