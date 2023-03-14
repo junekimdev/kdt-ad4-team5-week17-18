@@ -47,22 +47,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Git Clone
-        uses: actions/checkout@v3
-        with:
-          github-server-url: https://github.com
-          repository: stella-cv/stella_vslam
-          submodules: true
-          path: stella_vslam
-
       - name: Set number of threads
         run: echo "NUM_THREADS=$(expr $(nproc) - 1)" >> $GITHUB_ENV
 
       - name: Docker Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ${{ github.workspace }}/stella_vslam
-          file: Dockerfile.desktop
+          file: ./Dockerfile.stella
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
