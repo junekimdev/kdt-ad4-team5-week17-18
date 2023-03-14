@@ -1,4 +1,4 @@
-name: Team5 Docker Build
+name: Stella VSLAM Docker Build
 
 on:
   push:
@@ -46,8 +46,8 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern=team5-{{version}}
-            type=semver,pattern=team5-{{major}}.{{minor}}
+            type=semver,pattern=stell-{{version}}
+            type=semver,pattern=stell-{{major}}.{{minor}}
 
       - name: Login to Github Container registry
         if: github.ref_type == 'tag'
@@ -57,11 +57,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set number of threads
+        run: echo "NUM_THREADS=$(expr $(nproc) - 1)" >> $GITHUB_ENV
+
       - name: Docker Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.team5
+          file: ./Dockerfile.stella
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            NUM_THREADS=${{ env.NUM_THREADS }}

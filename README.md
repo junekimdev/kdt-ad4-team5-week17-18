@@ -26,7 +26,7 @@ SLAM in Docker within CI/CD pipeline.
 ### Prepare Data
 
 1. Get dataset from RGBD camera (e.g. Intel Realsense)
-2. Put them into `dataset/`
+2. Put them into `~/dataset/`
 
 > #### Dataset Directory Structure
 >
@@ -46,5 +46,5 @@ docker pull ghcr.io/junekimdev/kdt-ad4-team5-week17-18:team5-x.x
 
 ```bash
 xhost +
-docker run --rm --gpus all --ipc=host --net=host --privileged -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -e NVIDIA_DRIVER_CAPABILITIES=all ghcr.io/junekimdev/kdt-ad4-team5-week17-18:team5-x.x
+docker run --rm --gpus all --ipc=host --net=host --privileged -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v <dataset_dir>:/dataset -e NVIDIA_DRIVER_CAPABILITIES=all ghcr.io/junekimdev/kdt-ad4-team5-week17-18:team5-x.x
 ```

@@ -199,9 +199,9 @@ RUN set -x && \
   rm -rf *
 
 # stella_vslam
+WORKDIR /stella_vslam
 RUN set -x && \
-  git clone https://github.com/stella-cv/stella_vslam.git && \
-  cd stella_vslam && \
+  git clone https://github.com/stella-cv/stella_vslam.git . && \
   mkdir -p build && \
   cd build && \
   cmake \
