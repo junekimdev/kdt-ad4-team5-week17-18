@@ -201,7 +201,7 @@ RUN set -x && \
 # stella_vslam
 WORKDIR /stella_vslam
 RUN set -x && \
-  git clone https://github.com/stella-cv/stella_vslam.git . && \
+  git clone --recursive https://github.com/stella-cv/stella_vslam.git . && \
   mkdir -p build && \
   cd build && \
   cmake \
