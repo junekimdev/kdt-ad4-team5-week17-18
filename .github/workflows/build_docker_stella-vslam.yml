@@ -14,12 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  dockerize:
+  run_unit_tests:
     runs-on: self-hosted
-
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout source code
@@ -32,6 +28,15 @@ jobs:
           ./test.py
           echo "===== Testing finished ====="
 
+  dockerize:
+    runs-on: self-hosted
+    needs: run_unit_tests
+    if: success()
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -43,11 +48,13 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.REPO_NAME }}
+          flavor: |
+            latest=false
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern=stell-{{version}}
-            type=semver,pattern=stell-{{major}}.{{minor}}
+            type=semver,pattern=stella-{{version}}
+            type=semver,pattern=stella-{{major}}.{{minor}}
 
       - name: Login to Github Container registry
         if: github.ref_type == 'tag'
